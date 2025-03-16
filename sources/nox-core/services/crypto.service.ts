@@ -7,7 +7,7 @@ declare var require: any;
   providedIn: "root"
 })
 export class CryptoService {
-  public secretKey: string = "wi3n1l87DNB6MVssF49hD93bMZWX93b3";
+  public secretKey: string = "";
 
   encrypt(value: string): string {
     return AES.encrypt(value, this.secretKey).toString();
