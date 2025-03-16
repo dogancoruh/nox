@@ -1,0 +1,15 @@
+<div class="tags-input-container" [class.tags-input-disabled]="disabled">
+  @for(tag of tags; track tag;){
+  <div class="tags-input-tag">
+    {{tag}}
+    @if(!disabled){
+    <button type="button" class="tags-input-tag-remove-button"
+      (click)="onTagRemoveButtonClicked($event, tag)">x</button>
+    }
+  </div>
+  }
+  @if(!disabled){
+  <input #tagInput class="tag-input-input" type="text" [ngStyle]="{'width': placeholderWith}"
+    (keydown)="onTagInputInputKeyDown($event)" placeholder="{{placeholder}}" (blur)="onTagInputInputBlur($event)" />
+  }
+</div>

@@ -1,0 +1,1 @@
+export declare type NoxHorizontalAlign = "left" | "center" | "right";

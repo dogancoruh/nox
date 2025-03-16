@@ -1,0 +1,1 @@
+export declare type NoxTableSelectionMode = "none" | "single" | "multiple";

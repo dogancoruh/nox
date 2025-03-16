@@ -1,0 +1,1 @@
+export declare type NoxAddButtonAppearance = "primary" | "secondary" | "outline";

@@ -1,0 +1,243 @@
+@if (!loading && data && data.length > 0) {
+<div class="table-container table-responsive">
+  <table class="table table-striped table-borderless">
+    <thead>
+      <tr>
+        @if (selectionMode == 'single') {
+        <th class="table-radio-column nox-table-header">
+          &nbsp;
+        </th>
+        }
+        @if (selectionMode == 'multiple') {
+        <th class="table-checkbox-column nox-table-header">
+          <input type="checkbox" class="form-check-input select-all-rows-checkbox ms-2 me-2"
+            (input)="onSelectAllRowsCheckBoxInput($event)" />
+        </th>
+        }
+        @for(column of columns; track column) {
+        @if(column.visible){
+        <th class="nox-table-header" [class]="column.headerClass" [class]="column.columnClass"
+          [style.width]="getWidthForColumn(column)" [style.min-width]="getWidthForColumn(column)">
+          @if (!column.sortable) {
+          <span>{{ column.title }}</span>
+          } @else {
+          <div class="sortable-column">
+            <a class="btn btn-link" (click)="onColumnHeaderClicked($event, column)">{{ column.title }}</a>
+            @if(sortDirection == 'ascending' && column.name == sortColumn){
+            <fa-icon [icon]="faCaretUp" />
+            }
+            @if(sortDirection == 'descending' && column.name == sortColumn){
+            <fa-icon [icon]="faCaretDown" />
+            }
+          </div>
+          }
+        </th>
+        }
+        }
+        @if(actions && actions.length > 0){
+        <th class="nox-table-header">&nbsp;</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for(row of data; track row; let rowIndex = $index) {
+      <tr class="table-row nox-table-row" [class.nox-table-row-highlighted]="isItemSelected(row)">
+        @if(selectionMode == 'single'){
+        <td class="table-radio-column">
+          <input type="radio" class="form-check-input" name="selectedRowId" [checked]="isItemSelected(row)"
+            (input)="onRowRadioInput($event, rowIndex)" />
+        </td>
+        }
+        @if(selectionMode == 'multiple') {
+        <td class="table-checkbox-column">
+          <input type="checkbox" class="form-check-input row-checkbox ms-2 me-2" [checked]="isItemSelected(row)"
+            (input)="onRowCheckboxInput($event, rowIndex)" />
+        </td>
+        }
+        @for(column of columns; track column; let columnIndex = $index) {
+        @if(column.visible){
+        <td class="table-cell" [class]="column.cellClass" [class]="column.columnClass"
+          [style.width]="getWidthForColumn(column)" [style.min-width]="getWidthForColumn(column)">
+          @if (column.type == "text") {
+          @if (!column.selectable) {
+          <div class="truncate" [style.text-align]="getTextAlignForColumn(column)">
+            {{ getTextColumnValue(column, row) }}
+          </div>
+          } @else {
+          <a class="truncate table-selectable-column-value" [style.text-align]="getTextAlignForColumn(column)"
+            (click)="onRowColumnSelected(column, row)">
+            {{ getTextColumnValue(column, row) }}
+          </a>
+          }
+          }
+          @if(column.type == 'checkBox'){
+          <div class="table-checkbox-cell">
+            @if(getCheckBoxColumnValue(row, column) && column.iconTrue){
+            <div [style.color]="column.colorTrue">
+              <fa-icon [icon]="column.iconTrue" size="lg"></fa-icon>
+            </div>
+            }
+            @if(!getCheckBoxColumnValue(row, column) && column.iconFalse){
+            <div [style.color]="column.colorFalse">
+              <fa-icon [icon]="column.iconFalse" size="lg"></fa-icon>
+            </div>
+            }
+            @if(getCheckBoxColumnValue(row, column) && column.textTrue){
+            <span [style.color]="column.colorTrue">
+              {{ column.textTrue }}
+            </span>
+            }
+            @if(!getCheckBoxColumnValue(row, column) && column.textFalse){
+            <span [style.color]="column.colorFalse">
+              {{ column.textFalse }}
+            </span>
+            }
+            @if(!column.iconTrue && !column.iconFalse && !column.textTrue && !column.textFalse){
+            <input type="checkbox" class="form-check-input row-checkbox ms-2 me-2" [checked]="row[column.name]"
+              disabled="disabled" />
+            }
+          </div>
+          }
+
+          @if(column.type == 'dropDown'){
+          <div [style.text-align]="getTextAlignForColumn(column)">
+            {{ getMacthingDropDownItemValue(column, row[column.name]) }}
+          </div>
+          }
+
+          @if(column.type == 'date'){
+          <div [style.text-align]="getTextAlignForColumn(column)">
+            {{ getDateColumnValue(column, row) }}
+          </div>
+          }
+
+          @if(column.type == 'time'){
+          <div [style.text-align]="getTextAlignForColumn(column)">
+            {{ getTimeColumnValue(column, row) }}
+          </div>
+          }
+
+          @if(column.type == 'dateTime'){
+          <div [style.text-align]="getTextAlignForColumn(column)">
+            {{ getDateTimeColumnValue(column, row) }}
+          </div>
+          }
+
+          @if(column.type == 'template'){
+          <div>
+            @if (column.template) {
+            <ng-template [ngTemplateOutlet]="column.template"
+              [ngTemplateOutletContext]="{ $implicit: getColumnTemplateContext(row, rowIndex, column, columnIndex) }"></ng-template>
+            } @else {
+            <span class="text-danger">No template</span>
+            }
+          </div>
+          }
+        </td>
+        }
+        }
+        @if(actions && actions.length > 0){
+        <td class="table-actions-cell">
+          @for(action of getNonContextActions(); track action; let actionIndex = $index){
+          <div>
+            @if(!action.isContext && action.buttonType == 'button' && isActionVisible(action, row)){
+            <a class="btn btn-primary" (click)="onActionButtonClicked($event, action, row)"
+              [routerLink]="getActionLink(action, row)" [queryParams]="getActionLinkQueryParams(action, row)"
+              [class.disabled]="!isActionEnabled(action, row)">
+              @if
+              (action.template) {
+              <ng-template [ngTemplateOutlet]="action.template"
+                [ngTemplateOutletContext]="{ $implicit: getActionTemplateContext(row, rowIndex, action, actionIndex) }"></ng-template>
+              } @else {
+              {{action.title}}
+              }
+            </a>
+            }
+            @if(!action.isContext && action.buttonType == 'link' && isActionVisible(action, row)){
+            <a class="btn btn-link" (click)="onActionButtonClicked($event, action, row)"
+              [routerLink]="getActionLink(action, row)" [queryParams]="getActionLinkQueryParams(action, row)"
+              [class.disabled]="!isActionEnabled(action, row)">
+              @if (action.template) {
+              <ng-template [ngTemplateOutlet]="action.template"
+                [ngTemplateOutletContext]="{ $implicit: getActionTemplateContext(row, rowIndex, action, actionIndex) }"></ng-template>
+              } @else {
+              {{action.title}}
+              }
+            </a>
+            }
+          </div>
+          }
+
+          @if(hasContextAction(row)){
+          <div class="dropdown">
+            <a class="btn btn-link" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <fa-icon [icon]="iconActionContextMenuButton" class="fa-lg"></fa-icon>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              @for(action of getNonBatchContextActions(); track action; let actionIndex = $index){
+              <li>
+                @if(isActionVisible(action, row)){
+                @if(action.hasDivider){
+                <div class="dropdown-divider"></div>
+                }
+
+                <a class="dropdown-item" [routerLink]="getActionLink(action, row)"
+                  [queryParams]="getActionLinkQueryParams(action, row)" (click)="onActionClicked($event, action, row)"
+                  [class.disabled]="!isActionEnabled(action, row)">
+                  @if (action.template) {
+                  <ng-template [ngTemplateOutlet]="action.template"
+                    [ngTemplateOutletContext]="{ $implicit: getActionTemplateContext(row, rowIndex, action, actionIndex) }"></ng-template>
+                  } @else {
+                  {{action.title}}
+                  }</a>
+                }
+              </li>
+              }
+            </ul>
+          </div>
+          }
+        </td>
+        }
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+}
+
+<!-- initial empty data -->
+@if ((dataRefreshReason == "none" || dataRefreshReason == "initial") && !loading && (!data || data.length == 0) &&
+!errorMessage) {
+<div class="table empty-data">
+  <img class="empty-data-icon" [src]="emptyIcon" />
+  <div class="p-2">{{ initialEmptyDataMessage }}</div>
+</div>
+}
+
+<!-- search empty data -->
+@if (dataRefreshReason == "search" && !loading && (!data || data.length == 0) && !errorMessage) {
+<div class="table empty-data">
+  <img class="empty-data-icon" [src]="emptyIcon" />
+  <div class="p-2">{{ searchEmptyDataMessage }}</div>
+</div>
+}
+
+<!-- error data -->
+@if (!loading && errorMessage) {
+<div class="table empty-data">
+  <div class="text-danger pb-2">{{ errorMessage }}</div>
+</div>
+}
+
+<!-- loading data -->
+@if (loading) {
+<div class="p-2 empty-data">
+  <div class="d-flex justify-content-center align-items-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">{{ loadingText }}</span>
+    </div>
+    <span class="ms-3">{{ loadingText }}</span>
+  </div>
+</div>
+}

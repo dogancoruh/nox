@@ -1,0 +1,1 @@
+export declare type NoxTableColumnHorizontalAlignment = "left" | "center" | "right";

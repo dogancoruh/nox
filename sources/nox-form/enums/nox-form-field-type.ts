@@ -1,0 +1,1 @@
+export declare type NoxFormFieldType = "none" | "text" | "password" | "numeric" | "integer" | "float" | "dropDown" | "checkBox" | "date" | "time" | "dateTime" | "file" | "textarea" | "hidden" | "treeDropDown" | "tags" | "editor";

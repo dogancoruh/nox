@@ -1,0 +1,55 @@
+@if(mode == 'delete' && deleteDisclaimerLocation == 'top' && deleteDisclaimer){
+<div class="d-flex w-100 alert alert-danger justify-content-center align-items-center text-danger">
+  <fa-icon class="fs-4 me-2" [icon]="faCircleMarks"></fa-icon>
+  <span>{{ deleteDisclaimer }}</span>
+</div>
+}
+<form [formGroup]="formGroup" class="nox-form grid">
+  @if(successMassageLocation == 'top' && successMessage){
+  <span class="success-message mt-0">
+    {{ successMessage }}
+  </span>
+  }
+  @if(errorMessageLocation == 'top' && errorMessage){
+  <span class="error-message mt-0">
+    {{ errorMessage }}
+  </span>
+  }
+  <nox-form-field-repeater [formGroup]="formGroup" [items]="items" [buttonsEnabled]="buttonsEnabled" [mode]="mode"
+    [baseUrl]="baseUrl" [maxLabelLength]="maxLabelLength" [passwordRevealIcon]="passwordRevealIcon"
+    [readonly]="readonly" [validationErrorRequiredText]="validationErrorRequiredText"
+    [validationErrorMinLengthText]="validationErrorMinLengthText"
+    [validationErrorMaxLengthText]="validationErrorMaxLengthText" [validationErrorEmailText]="validationErrorEmailText"
+    [validationErrorPatternText]="validationErrorPatternText" [validationErrorMatchText]="validationErrorMatchText"
+    (onFieldAction)="onFormFieldRepeaterFieldAction($event)"></nox-form-field-repeater>
+  @if(successMassageLocation == 'bottom' && successMessage){
+  <span class="success-message">
+    {{ successMessage }}
+  </span>
+  }
+
+  @if(errorMessageLocation == 'bottom' && errorMessage){
+  <span class="error-message">
+    {{ errorMessage }}
+  </span>
+  }
+  @if(mode == 'delete' && deleteDisclaimerLocation == 'bottom' && deleteDisclaimer){
+  <div class="d-flex w-100 alert alert-danger justify-content-center align-items-center text-danger mt-3">
+    <fa-icon class="fs-4 me-2" [icon]="faCircleMarks"></fa-icon>
+    <span>{{ deleteDisclaimer }}</span>
+  </div>
+  }
+  <div class="button-container" [class.button-container-right]="buttonsAlign == 'right'">
+    @for(button of buttons; track button; let idx = $index){
+    <button type="button" [disabled]="getSubmitButtonDisabled(button)" [class.ms-1]="idx != 0"
+      [class.invisible-button]="!button.visible || (button.type == 'submit' && mode == 'details')"
+      [routerLink]="button.link" (click)="onButtonClicked($event, button)"
+      class="btn {{ getButtonAppearanceClassName(button.appearance) }}">
+      {{ button.title }}
+      @if(button.type == 'submit' && buttonSpinnerVisible){
+      <div class="spinner-border spinner-border-sm m-0 p-0 ms-1 text-white" role="status"></div>
+      }
+    </button>
+    }
+  </div>
+</form>

@@ -1,0 +1,29 @@
+@if(items && items.length > 0){
+<div class="breadcrumb-item-container">
+  @if(homeIconVisible){
+  <a class="home-button" (click)="onHomeButtonClicked()">
+    <div class="home-icon">
+      <fa-icon [icon]="homeIcon" [style.color]="textColor"></fa-icon>
+    </div>
+    <span class="separator">
+      <fa-icon [icon]="separatorIcon" [style.color]="textColor"></fa-icon>
+    </span>
+  </a>
+  }
+  @for(item of items; track item; let idx = $index){
+  <div class="breadcrumb-item_">
+    @if(idx != 0){
+    <span class="separator">
+      <fa-icon [icon]="separatorIcon" [style.color]="textColor"></fa-icon>
+    </span>
+    }
+    @if(item.title && !item.link){
+    <span [style.color]="textColor">{{item.title}}</span>
+    }
+    @if(item.title && item.link){
+    <a class="btn btn-link" [routerLink]="item.link">{{item.title}}</a>
+    }
+  </div>
+  }
+</div>
+}

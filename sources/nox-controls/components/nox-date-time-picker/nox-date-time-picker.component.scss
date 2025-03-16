@@ -1,0 +1,32 @@
+.date-time-picker-container {
+  display: flex;
+  align-items: center;
+  background-color: inherit;
+}
+
+.date-time-picker-date-picker {
+  display: flex;
+  border: 1px solid #ced4da;
+  width: 100%;
+}
+
+.date-time-picker-date-picker button {
+  outline: none;
+  border: none;
+  background: none;
+  color: #000;
+}
+
+.date-time-picker-date-picker button:active {
+  background-color: #efefef;
+}
+
+.date-time-picker-date-picker input {
+  background-color: inherit !important;
+  border-radius: 0px;
+  border: none;
+}
+
+.input-disabled {
+  background-color: #efefef;
+}

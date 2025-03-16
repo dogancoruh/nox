@@ -1,0 +1,1 @@
+export declare type NoxDateTimePickerViewMode = "date" | "time" | "dateTime";

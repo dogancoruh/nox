@@ -1,0 +1,13 @@
+<div ngbDropdown class="nox-tree-drop-down">
+    <button ngbDropdownToggle type="button" class="form-control text-dark nox-tree-drop-down-button w-100"
+        data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" [disabled]="disabled">
+        {{ getSelectedText() }}
+    </button>
+    <div ngbDropdownMenu class="nox-tree-drop-down-menu" [style.width]="dropDownWidth">
+        <nox-tree [data]="items" [selectionMode]="multiSelect ? 'multiple' : 'single'"
+            [addRootNodeButtonVisible]="false" textFieldName="{{textFieldName}}" [selectedFieldName]="selectedFieldName"
+            valueFieldName="{{valueFieldName}}" childrenFieldName="{{childrenFieldName}}"
+            (onSelectionChanged)="onTreeSelectionChanged($event)" initialEmptyDataMessage=""
+            searchEmptyDataMessage="" [autoExpand]="autoExpand" [autoExpandDepth]="autoExpandDepth"/>
+    </div>
+</div>

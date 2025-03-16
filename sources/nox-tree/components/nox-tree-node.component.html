@@ -1,0 +1,134 @@
+<div class="node">
+  <div class="node-row" [class.node-selected]="selectionMode == 'single' && getNodeSelected(node)">
+    @for (item of [].constructor(depth); track item) {
+    @if(!isRootNode){
+    <div class="node-spacer" [class.node-selectable]="selectable" (click)="onClick($event)">
+      &nbsp;</div>
+    }
+    }
+
+    @if (isRootNode || hasChildNodes()) {
+    <div class="node-collapse-expand-button">
+      @if(hasChildNodes()){
+      <button class="node-collapse-expand-button" (click)="onCollapseExpandButtonClicked()">
+        <fa-icon [icon]="!getNodeExpanded(node) ? iconNodeCollapsed : iconNodeExpanded" />
+      </button>
+      }
+    </div>
+    } @else {
+    <div class="node-collapse-expand-button-placeholder"></div>
+    }
+
+    <!-- single selection-->
+    @if(selectionMode == 'single'){
+    <div class="node-title" [class.node-selectable]="selectable" [class.node-title-filled]="nodeActionsAlign == 'right'"
+      (click)="onClick($event)" (dblclick)="onDoubleClick()">
+      <!-- icon -->
+      @if(getNodeIcon(node)){
+      <div class="node-row-icon-container">
+        <fa-icon class="text-primary" [icon]="getNodeIcon(node)" />
+      </div>
+      }
+      <!-- non selectable -->
+      @if(!selectable || !getNodeSelectable(node)){
+      <div class="node-title-plain">
+        {{ getNodeTitleEx(node, textFieldName) }}
+      </div>
+      }
+      <!-- selectable -->
+      @if(selectable && getNodeSelectable(node)){
+      <a class="node-title-button btn btn-link" [class.disabled]="!selectable" (click)="onClick($event)">{{
+        getNodeTitleEx(node, textFieldName) }}</a>
+      }
+    </div>
+    }
+
+    <!-- multiple selection -->
+    @if(selectionMode == 'multiple') {
+    <div class="node-title" [class.node-selectable]="selectable"
+      [class.node-title-filled]="nodeActionsAlign == 'right'">
+      @if(selectable && getNodeSelectable(node) && selectionMode == 'multiple'){
+      <input class="form-check-input node-check" type="checkbox" [checked]="getNodeSelected(node)"
+        (dblclick)="onInputCheckDoubleClick($event)" (input)="onInputCheckInput($event, node)" />
+      }
+      <!-- icon -->
+      @if(getNodeIcon(node)){
+      <div class="node-row-icon-container">
+        <fa-icon class="text-primary" [icon]="getNodeIcon(node)" />
+      </div>
+      }
+      <!-- non selectable -->
+      @if(!selectable || !getNodeSelectable(node)){
+      <div class="node-title-plain">
+        {{ getNodeTitleEx(node, textFieldName) }}
+      </div>
+      }
+      <!-- selectable -->
+      @if(selectable && getNodeSelectable(node)){
+      <a class="node-title-button" [class.disabled]="!selectable" (click)="onClick($event)">{{
+        getNodeTitleEx(node, textFieldName) }}</a>
+      }
+    </div>
+    }
+
+    <div class="node-actions">
+      @if (hasContextAction()) {
+      <div class="node-action dropdown">
+        <a class="btn btn-link" href="#" role="button" data-bs-toggle="dropdown" id="dropdownMenuButton"
+          aria-expanded="false">
+          <fa-icon [icon]="iconContextMenu" class="fa-lg"></fa-icon>
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          @for(action of getContextNodeActions(); track action; let actionIndex = $index){
+          <li>
+            @if(action.hasDivider){
+            <div class="dropdown-divider"></div>
+            }
+            <a class="dropdown-item" [routerLink]="getActionLink(action, node)"
+              (click)="onActionHandler($event, action, node)">
+
+              @if (action.template) {
+              <ng-template [ngTemplateOutlet]="action.template"
+                [ngTemplateOutletContext]="{ $implicit: getActionTemplateContext(node, action, actionIndex)  }"></ng-template>
+              } @else {
+              @if (action.icon) {
+              <fa-icon class="text-primary" [icon]="action.icon" />
+              }
+              <span>{{ action.title }}</span>
+              }
+            </a>
+          </li>
+          }
+        </ul>
+      </div>
+      }
+    </div>
+
+    @if (selectable && getNodeSelectable(node) && nodeActionsAlign != 'right') {
+    <a class="node-title-button" [class.btn,class.btn-link]="selectionMode == 'single'" [class.disabled]="!selectable"
+      (click)="onClick($event)">
+    </a>
+    }
+  </div>
+
+  @if (getNodeExpanded(node) && hasChildNodes()) {
+  <div class="child-container">
+    @for(node of getChildNodes(); track node;){
+    <nox-tree-node [readonly]="readonly" [tree]="tree" [node]="node" [depth]="depth + 1"
+      [defaultNodeIcon]="defaultNodeIcon" [nodeIcons]="nodeIcons" [nodeActions]="nodeActions"
+      [nodeActionsAlign]="nodeActionsAlign" [textFieldName]="textFieldName" [valueFieldName]="valueFieldName"
+      [keyFieldName]="keyFieldName" [parentKeyFieldName]="parentKeyFieldName" [childrenFieldName]="childrenFieldName"
+      [expandedFieldName]="expandedFieldName" [disabledFieldName]="disabledFieldName"
+      [iconTypeFieldName]="iconTypeFieldName" [actionTypeFieldName]="actionTypeFieldName" [readonly]="readonly"
+      [selectable]="selectable" [selectionMode]="selectionMode" [iconAddNode]="iconAddNode"
+      [iconEditNode]="iconEditNode" [iconRemoveNode]="iconRemoveNode" [iconNodeCollapsed]="iconNodeCollapsed"
+      [iconNodeExpanded]="iconNodeExpanded" [canUserExpandCollapse]="canUserExpandCollapse"
+      [autoCollapseOtherExpandedNodes]="autoCollapseOtherExpandedNodes"
+      [ellipsisLength]="ellipsisLength"
+      (onSelectionChanged)="onNodeSelectionChanged($event)" (onNodeExpanded)="onNodeExpandedHandler($event)"
+      (onNodeCollapsed)="onNodeCollapsedHandler($event)" (onAction)="onNodeActionHandler($event)"
+      (onMoveDown)="onNodeMoveDownHandler($event)" (onMoveUp)="onNodeMoveUpHandler($event)" />
+    }
+  </div>
+  }
+</div>

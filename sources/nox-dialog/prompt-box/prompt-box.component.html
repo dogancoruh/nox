@@ -1,0 +1,46 @@
+<div class="prompt-box">
+    <div class="prompt-box-icon">
+        @if(icon == 'information'){
+        <img src="{{ imageInformation }}" />
+        }
+        @if(icon == 'warning'){
+        <img src="{{ imageWarning }}" />
+        }
+        @if(icon == 'error'){
+        <img src="{{ imageError }}" />
+        }
+        @if(icon == 'delete'){
+        <img src="{{ imageDelete }}" />
+        }
+    </div>
+    @if(message){
+    <span class="prompt-box-message">{{ message }}</span>
+    }
+    @if(errorMessage){
+    <span class="prompt-box-error-message text-danger text-center">{{ errorMessage }}</span>
+    }
+    <input class="prompt-box-input form-control" type="text" [(ngModel)]="value" [disabled]="disabled"
+        [maxlength]="maximumValueLength" (keyup.enter)="onInputKeyEnterPressed()" />
+    <div class="prompt-box-buttons">
+        @if(positiveButton == 'save'){
+        <button type="button" class="btn btn-primary" result="save" (click)="onButtonPositiveClicked($event)"
+            [disabled]="value == '' || disabled || (needsChange && value == originalValue)">
+            @if(loaderVisible){
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            }
+            {{ saveActionText }}
+        </button>
+        }
+        @if(positiveButton == 'create'){
+        <button class="btn btn-primary" result="save" (click)="onButtonPositiveClicked($event)"
+            [disabled]="value == '' || disabled || (needsChange && value == originalValue)">
+            @if(loaderVisible){
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            }
+            {{ createActionText }}
+        </button>
+        }
+        <button class="btn btn-secondary" result="cancel" (click)="onButtonCancelClicked()" [disabled]="disabled">{{
+            cancelActionText }}</button>
+    </div>
+</div>

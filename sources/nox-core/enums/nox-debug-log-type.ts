@@ -1,0 +1,1 @@
+export declare type NoxDebugLogType =  "none" | "log" | "info" | "warn" | "error";

@@ -1,0 +1,46 @@
+.page-row {
+  display: flex;
+  align-items: center;
+}
+
+.pager-total-record-count-container {
+  background-color: #f8f9fa;
+  padding: 4px 10px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}
+
+.page-container {
+  display: flex;
+  align-items: center;
+}
+
+.page-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ccc;
+  border-right: none;
+  color: #444;
+  background-color: #fff;
+}
+
+.page-button:first-child {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.page-button:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-right: 1px solid #ccc;
+}
+
+.page-selector {
+  width: 70px;
+  margin-left: 5px;
+  height: 32px;
+  font-size: 12px;
+}

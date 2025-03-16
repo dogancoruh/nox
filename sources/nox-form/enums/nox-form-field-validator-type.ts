@@ -1,0 +1,1 @@
+export declare type NoxFormFieldValidatorType = "none" | "min" | "max" | "required" | "requiredTrue" | "email" | "minLength" | "maxLength" | "pattern" | "nullValidator" | "compose" | "composeAsync" | "match";

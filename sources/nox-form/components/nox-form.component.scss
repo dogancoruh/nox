@@ -1,0 +1,32 @@
+.success-message {
+  color: #55cc55;
+  display: block;
+  margin-top: 10px;
+}
+
+.error-message {
+  color: #ff0000;
+  display: block;
+  margin-top: 10px;
+}
+
+.wrap {
+  height: 40px;
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: column;
+}
+
+.invisible-button {
+  display: none;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.button-container-right {
+  justify-content: flex-end;
+}

@@ -1,0 +1,1 @@
+export declare type NoxDebugLevel = "none" | "low" | "high";

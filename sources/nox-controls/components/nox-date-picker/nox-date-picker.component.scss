@@ -1,0 +1,26 @@
+.date-picker-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  background-color: inherit;
+}
+
+.date-picker-container button {
+  outline: none;
+  border: none;
+  background: none;
+  color: #000;
+}
+
+.date-picker-container button:active {
+  background-color: #efefef;
+}
+
+.date-picker-container input {
+  background-color: inherit !important;
+}
+
+.input-disabled {
+  background-color: #efefef;
+}

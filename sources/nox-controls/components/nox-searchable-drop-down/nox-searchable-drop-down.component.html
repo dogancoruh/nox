@@ -1,0 +1,28 @@
+<div class="dropdown searchable-drop-down">
+  <button class="btn dropdown-toggle w-100" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+    aria-expanded="false">
+    {{getSelectedItemText()}}
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    @if(searchable){
+    <div class="dropdown-search">
+      <input class="form-control" type="text" [(ngModel)]="searchKeyword" [placeholder]="searchPlaceholder"
+        autocomplete="off" />
+    </div>
+    }
+
+    @if(defaultItemVisible){
+    <li>
+      <a class="dropdown-item" (click)="onItemSelected($event, defaultItem)">{{defaultItemText}}</a>
+    </li>
+    }
+
+    @for(item of items; track item;){
+    <li>
+      @if(isItemContain(item, searchKeyword)){
+      <a class="dropdown-item" (click)="onItemSelected($event, item)">{{getItemText(item)}}</a>
+      }
+    </li>
+    }
+  </ul>
+</div>

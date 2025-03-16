@@ -1,0 +1,26 @@
+.nox-progress {
+    border: 1px solid #ccc;
+    padding: 1px;
+    position: relative;
+    min-height: 20px;
+    background-color: #e9ecef;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.nox-progress-fill {
+    background-color: rgba(13, 90, 200, 0.3);
+    position: absolute;
+    top: 1px;
+    bottom: 1px;
+    border-radius: 5px;
+}
+
+.nox-progress-text {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    color: #fff;
+    mix-blend-mode: difference;
+}

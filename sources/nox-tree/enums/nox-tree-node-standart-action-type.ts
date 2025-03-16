@@ -1,0 +1,1 @@
+export declare type NoxTreeNodeStandartActionType =  "none" | "moveDown" | "moveUp";

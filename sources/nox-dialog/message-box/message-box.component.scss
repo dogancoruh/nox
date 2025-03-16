@@ -1,0 +1,61 @@
+.message-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 10px;
+}
+
+.message-box-title {
+  width: 100%;
+  text-align: left;
+  font-weight: 500;
+  font-size: 1.5rem;
+  padding: 1rem 1.5rem;
+}
+
+.message-box-message {
+  font-size: 16px;
+  letter-spacing: 0px;
+  color: #05294e;
+  padding: 20px;
+  padding-top: 10px;
+  padding-bottom: 0px;
+  width: 100%;
+  text-align: center;
+}
+
+.message-box-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.message-box-buttons .btn {
+  margin-left: 5px;
+  margin-right: 5px;
+  min-width: 60px;
+}
+
+.message-box-icon img {
+  width: 120px;
+  height: 120px;
+  margin-top: 10px;
+}
+
+.message-box-icon fa-icon {
+  font-size: 7rem;
+}
+
+.message-box-buttons button .spinner-border {
+  margin-bottom: 2px;
+  margin-right: 2px;
+}
+
+.message-box .btn:disabled {
+  opacity: 0.8 !important;
+  cursor: default;
+}

@@ -1,0 +1,63 @@
+.prompt-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 20px;
+}
+
+.prompt-box-message {
+  font-family: "Rubik", sans-serif;
+  font-size: 16px;
+  letter-spacing: 0px;
+  color: #05294e;
+  margin-bottom: 5px;
+  width: 100%;
+  text-align: center;
+}
+
+.prompt-box-error-message {
+  word-wrap: break-word;
+}
+
+.prompt-box-input {
+  font-family: "Rubik", sans-serif;
+  font-size: 16px;
+  letter-spacing: 0px;
+  color: #05294e;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.prompt-box-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+
+.prompt-box-buttons .btn {
+  min-width: 60px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.prompt-box-buttons .btn:disabled {
+  opacity: 0.8 !important;
+  cursor: default;
+}
+
+.prompt-box-buttons .btn:first-child {
+  margin-left: 0px;
+}
+
+.prompt-box-buttons .btn:last-child {
+  margin-right: 0px;
+}
+
+.prompt-box-buttons button .spinner-border {
+  margin-bottom: 2px;
+  margin-right: 2px;
+}

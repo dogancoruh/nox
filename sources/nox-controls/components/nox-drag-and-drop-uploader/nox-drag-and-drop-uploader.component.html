@@ -1,0 +1,65 @@
+<div class="drag-and-drop-uploader-container">
+  <div class="drag-and-drop-uploader-drop-area w-100" (fileDropped)="onFileDropped($event)">
+    @if(isInputVisible()){
+    <input #fileInput type="file" [accept]="acceptedFileExtensions" [attr.multiple]="multiple ? 'multiple' : null"
+      (change)="onFileInputChanged($event)" />
+    }
+    <img [src]="dropAreaImageUrl" />
+    @if(!hasSingleFileName()){
+    <div>
+      <h3>{{dropAreaText}}</h3>
+      <h3>{{dropAreaOrText}}</h3>
+    </div>
+    }
+    @if(hasSingleFileName()){
+    <div class="mb-3">
+      @if(showLinks){
+      <a (click)="onFileLinkClicked()">
+        {{ getSingleFileName() }}
+      </a>
+      }
+      @if(!showLinks){
+      <h3>{{ getSingleFileName() }}</h3>
+      }
+    </div>
+    }
+    @if(isUploadFileButtonVisible()){
+    <button type="button" class="upload-file-button" for="fileDropRef">
+      {{ dropAreaBrowseButtonText }}
+    </button>
+    }
+    @if(isRemoveSingleFileButtonVisible()){
+    <div class="single-file-buttons">
+      <button type="button" class="remove-single-file-button ms-2" (click)="onRemoveSingleFileButtonClicked()">
+        {{ dropAreaRemoveButtonText }}
+      </button>
+    </div>
+    }
+  </div>
+
+  @if(multiple){
+  <div class="file-list">
+    @for(fileInfo of fileInfos; track fileInfo; let i = $index){
+    <div class="file-list-item">
+      <img [src]="fileListItemIconUrl" class="file-list-item-icon">
+      <div class="file-list-item-information">
+        @if(showLinks){
+        <a (click)="onFileLinkClicked(fileInfo)">
+          <h4 class="file-list-item-information-name">{{ fileInfo?.text }}</h4>
+        </a>
+        }
+        @if(!showLinks){
+        <h4 class="file-list-item-information-name">{{ fileInfo?.text }}</h4>
+        }
+        @if(fileInfo?.fileSize){
+        <p class="file-list-item-information-size">{{ formatBytes(fileInfo?.fileSize) }}</p>
+        }
+      </div>
+      <button type="button" class="file-list-item-remove-button">
+        <img [src]="fileListItemRemoveButtonIconUrl" (click)="onFileListRemoveButtonClicked($event, i)">
+      </button>
+    </div>
+    }
+  </div>
+  }
+</div>

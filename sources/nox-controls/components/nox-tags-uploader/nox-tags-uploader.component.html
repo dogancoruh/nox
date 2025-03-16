@@ -1,0 +1,25 @@
+<div class="tags-uploader w-100 mt-4">
+  <input #fileInput type="file" multiple class="d-none" [accept]="acceptedFileExtensions"
+    (input)="onFileInputChanged($event)" />
+  <div class="item-container">
+    @for(fileInfo of fileInfos; track fileInfo;){
+    <div class="item">
+      @if(!showLinks){
+      <span>{{ fileInfo.fileName }}</span>
+      }
+      @if(showLinks){
+      <a (click)="onItemClicked(fileInfo)">
+        <span>{{ fileInfo.text ?? fileInfo.fileName }}</span>
+      </a>
+      }
+      <button class="btn btn-link" (click)="onItemRemoveButtonClicked($event, fileInfo)">
+        <img [src]="itemRemoveButtonIconUrl" />
+      </button>
+    </div>
+    }
+    <button class="btn btn-upload" (click)="onUploadButtonClicked()">
+      <img [src]="uploadButtonIconUrl" />
+      {{uploadButtonText}}
+    </button>
+  </div>
+</div>

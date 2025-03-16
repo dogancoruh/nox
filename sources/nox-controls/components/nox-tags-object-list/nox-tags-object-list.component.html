@@ -1,0 +1,14 @@
+<div class="tags-input-container" [class.tags-input-disabled]="disabled">
+  @for(tagObject of tagObjects; track tagObject;){
+  <div class="tags-input-tag">
+    {{ getTagObjectText(tagObject) }}
+    @if(!disabled){
+    <button type="button" class="tags-input-tag-remove-button"
+      (click)="onTagRemoveButtonClicked($event, tagObject)">x</button>
+    }
+  </div>
+  }
+  @if(!disabled){
+  <button class="tag-add-item-button" (click)="onTagAddButtonClicked()">{{addTagButtonText}}</button>
+  }
+</div>

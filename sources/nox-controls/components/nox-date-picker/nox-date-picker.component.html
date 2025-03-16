@@ -1,0 +1,8 @@
+<div class="date-picker-container" [class.input-disabled]="disabled">
+  <input type="text" class="form-field form-control" [(ngModel)]="dateStruct" [disabled]="disabled"
+    (input)="onChange(value)" (blur)="onTouched()" ngbDatepicker #d="ngbDatepicker" [firstDayOfWeek]="firstDayOfWeek"
+    (dateSelect)="onDatePickerDateSelect($event)" date />
+  @if(!disabled){
+  <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
+  }
+</div>

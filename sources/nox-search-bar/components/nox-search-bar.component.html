@@ -1,0 +1,128 @@
+<div class="smart-search-bar-fields-container" [formGroup]="formGroup">
+  @for(field of fields; track field; let idx = $index;){
+  @if(field.visible){
+  <div class="smart-search-bar-field d-none d-md-block">
+    <div class="smart-search-bar-field-title">
+      {{ field.title }}
+    </div>
+    @if(field.type == 'text'){
+    <div>
+      <div class="nox-serach-bar-text-field-container ms-1 me-1">
+        <input class="form-control nox-search-bar-text-field-input" type="text" [style.width]="field.width"
+          [formControlName]="field.name" [placeholder]="field.placeholder" (keydown.enter)="onInputEnter()" />
+        @if(field.icon != null){
+        <fa-icon [icon]="field.icon" />
+        }
+      </div>
+    </div>
+    }
+    @if(field.type == 'dropDown'){
+    <div class="ms-1 me-1">
+      <select class="form-select" [formControlName]="field.name">
+        @for(dropDownItem of getFieldDropDownItems(field); track dropDownItem;){
+        <option [ngValue]="getFieldDropDownItemValue(dropDownItem, field)"
+          [selected]="data && data[field.name] == getFieldDropDownItemValue(dropDownItem, field)">
+          {{ getFieldDropDownItemText(dropDownItem, field) }}
+        </option>
+        }
+      </select>
+    </div>
+    }
+    @if(field.type == 'treeDropDown'){
+    <div class="ms-1 me-1">
+      <nox-tree-drop-down [formControlName]="field.name" textFieldName="{{field.dropDownItemDisplayFieldName}}"
+        valueFieldName="{{field.dropDownItemValueFieldName}}" emptySelectionText="{{field.placeholder}}"
+        [emptySelectionType]="field.treeDropdownEmptySelectionType"
+        childrenFieldName="{{field.dropDownChildrenFieldName}}" [items]="field.dropDownItems"
+        [multiSelect]="field.dropDownMultiSelect ?? false" [dropDownWidth]="field.dropDownWidth" />
+    </div>
+    }
+    @if(field.type == 'date'){
+    <div>
+      <nox-date-picker dateFormat="field.dateFormat" [formControlName]="field.name" />
+    </div>
+    }
+  </div>
+  }
+  }
+
+  <!-- mobile search bar fields -->
+  <div class="d-block d-md-none">
+    <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel"
+      data-bs-backdrop="static" data-bs-keyboard="false">
+      <div class="offcanvas-header">
+        <h4 class="mobile-filter-title">{{mobileSearchTitle}}</h4>
+      </div>
+      <div class="offcanvas-body">
+        @for(field of fields; track field; let idx = $index;){
+        @if(field.visible){
+        <div class="smart-search-bar-field-title mt-2">
+          {{ field.title }}
+        </div>
+
+        @if(field.type == 'text'){
+        <div [ngClass]="field.itemclass">
+          <div class="nox-serach-bar-text-field-container">
+            <input class="form-control nox-search-bar-text-field-input" type="text" [style.width]="field.width"
+              [formControlName]="field.name" [placeholder]="field.placeholder" />
+            @if(field.icon != null){
+            <fa-icon [icon]="field.icon" />
+            }
+          </div>
+        </div>
+        }
+        @if(field.type == 'dropDown'){
+        <div [ngClass]="field.itemclass">
+          <select class="form-select" [formControlName]="field.name">
+            @for(dropDownItem of getFieldDropDownItems(field); track dropDownItem;){
+            <option [ngValue]="getFieldDropDownItemValue(dropDownItem, field)"
+              [selected]="data && data[field.name] == getFieldDropDownItemValue(dropDownItem, field)">
+              {{ getFieldDropDownItemText(dropDownItem, field) }}
+            </option>
+            }
+          </select>
+        </div>
+        }
+        @if(field.type == 'treeDropDown'){
+        <div [ngClass]="field.itemclass">
+          <nox-tree-drop-down [formControlName]="field.name" textFieldName="{{field.dropDownItemDisplayFieldName}}"
+            valueFieldName="{{field.dropDownItemValueFieldName}}" emptySelectionText="{{field.placeholder}}"
+            [emptySelectionType]="field.treeDropdownEmptySelectionType"
+            childrenFieldName="{{field.dropDownChildrenFieldName}}" [items]="field.dropDownItems"
+            [multiSelect]="field.dropDownMultiSelect ?? false" [dropDownWidth]="field.dropDownWidth" />
+        </div>
+        }
+        @if(field.type == 'date'){
+        <div [ngClass]="field.itemclass">
+          <nox-date-picker dateFormat="field.dateFormat" [formControlName]="field.name" />
+        </div>
+        }
+        }
+        }
+        <div class="row my-4 px-2">
+          <button class="col-12 btn btn-primary mb-2" type="button" data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasTop" aria-controls="offcanvasTop" (click)="onSearchButtonClicked()">
+            {{ searchButtonText }}
+          </button>
+
+          <button class="col-12 btn btn-outline-primary" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
+            {{mobileCancelButtonText}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="d-none d-md-block btn btn-primary search-button" (click)="onSearchButtonClicked()">
+    {{ searchButtonText }}
+  </button>
+
+  <!-- mobile search button -->
+  @if(searchButtonIcon){
+  <button class="mobile-search-button d-block d-md-none text-primary" type="button" data-bs-toggle="offcanvas"
+    data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
+    <fa-icon [icon]="searchButtonIcon"></fa-icon>
+  </button>
+  }
+</div>

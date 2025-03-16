@@ -1,0 +1,33 @@
+.breadcrumb-item-container {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-item-container span {
+  margin-left: 5px;
+  font-size: 0.8rem;
+}
+
+.breadcrumb-item-container .btn-link {
+  padding: 0px 0px;
+  padding-left: 5px;
+  font-size: 0.8rem;
+}
+
+.breadcrumb-item_ {
+  
+}
+
+.breadcrumb-item_ .btn {
+  margin-top: 0px !important;
+  padding-top: 0px !important;
+}
+
+.home-icon {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.separator fa-icon {
+  font-size: 0.7rem;
+}

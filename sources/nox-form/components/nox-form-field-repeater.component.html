@@ -1,0 +1,708 @@
+<div [formGroup]="formGroup" class="row">
+  @for(hiddenItem of getHiddenItems(); track hiddenItem;){
+  <input type="hidden" [formControlName]="hiddenItem.name" />
+  }
+
+  @for(item of getDisplayItems(); track item; let idx = $index){
+  <div class="form-group" [ngClass]="item.sizeClass">
+    <!-- group -->
+    @if(item.visible && getItemType(item) == 'fieldGroup'){
+    <div class="col-12 mb-2"></div>
+    }
+
+    @if(item.visible && getItemType(item) == 'fieldGroup'){
+    <div class="col-12" [ngClass]="item.customClass">
+      <div class="group-title-container">
+        <div class="group-title">{{ item.title }}</div>
+        @if(getFieldInformationText(item)){
+        <fa-icon class="group-title-info-icon" [icon]="iconInformation"
+          ngbTooltip="{{ getFieldInformationText(item) }}" />
+        }
+      </div>
+      <nox-form-field-repeater [formGroup]="formGroup" repeaterId="{{item.id}}" [items]="getFieldGroupItems(item)"
+        [buttonsEnabled]="buttonsEnabled" [mode]="mode" [baseUrl]="baseUrl" [maxLabelLength]="maxLabelLength"
+        [passwordRevealIcon]="passwordRevealIcon" [readonly]="readonly"
+        [validationErrorRequiredText]="validationErrorRequiredText"
+        [validationErrorMinLengthText]="validationErrorMinLengthText"
+        [validationErrorMaxLengthText]="validationErrorMaxLengthText"
+        [validationErrorEmailText]="validationErrorEmailText" [validationErrorPatternText]="validationErrorPatternText"
+        [validationErrorMatchText]="validationErrorMatchText"
+        (onFieldAction)="onFormFieldRepeaterFieldAction($event)"></nox-form-field-repeater>
+    </div>
+    }
+
+    <!-- text -->
+    @if(item.visible && getFieldType(item) === 'text'){
+    <div [ngClass]="item.customClass" class="form-group">
+      <label class="form-label mb-0" for="{{ item.name }}">
+        <div class="field-label-container">
+          {{ item.title | NoxTextTruncater : maxLabelLength }}
+          @if(isFieldRequired(item)){
+          <span>*</span>
+          }
+          @if(getFieldInformationText(item)){
+          <fa-icon class="field-label-info-icon" [icon]="iconInformation"
+            ngbTooltip="{{ getFieldInformationText(item) }}" />
+          }
+        </div>
+      </label>
+      <div class="field-input-container">
+        <input [formControlName]="item.name" [maxLength]="getFieldMaxLength(item)" class="form-field form-control"
+          type="text" autofocus="{{ getFieldAutofocus(item) }}" name="{{item.name}}" [placeholder]="item.placeholder" />
+        @if (hasFieldActions(item)) {
+        <div class="field-actions-container">
+          @for (fieldAction of getFieldActions(item); track fieldAction) {
+          <button class="field-action-button" (click)="onFieldActionButtonClicked($event, item, fieldAction)">
+            <img src="{{fieldAction.icon}}" />
+          </button>
+          }
+        </div>
+        }
+      </div>
+      @if(hasValidationError(item.name, 'required')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "required", validationErrorRequiredText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'minLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "minLength", validationErrorMinLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'maxLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "maxLength", validationErrorMaxLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'email')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "email", validationErrorEmailText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'pattern')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "pattern", validationErrorPatternText) }}
+      </span>
+      }
+
+      @if(hasValidationError(item.name, 'match')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "match", validationErrorMatchText) }}
+      </span>
+      }
+    </div>
+    }
+
+    <!-- numeric, int -->
+    @if((item.visible && getFieldType(item) == 'numeric') || getFieldType(item) == 'integer'){
+    <div [ngClass]="item.customClass" class="form-group">
+      <label class="form-label mb-0" for="{{ item.name }}">
+        <div class="field-label-container">
+          {{ item.title | NoxTextTruncater : maxLabelLength }}
+          @if(isFieldRequired(item)){
+          <span>*</span>
+          }
+          @if(getFieldInformationText(item)){
+          <fa-icon class="field-label-info-icon" [icon]="iconInformation"
+            ngbTooltip="{{ getFieldInformationText(item) }}" />
+          }
+        </div>
+      </label>
+      <input [formControlName]="item.name" [autofocus]="getFieldAutofocus(item)" [maxLength]="getFieldMaxLength(item)"
+        class="form-field form-control" type="number" name="{{item.name}}" />
+      @if(hasValidationError(item.name, 'required')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "required", validationErrorRequiredText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'minLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "minLength", validationErrorMinLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'maxLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "maxLength", validationErrorMaxLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'email')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "email", validationErrorEmailText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'pattern')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "pattern", validationErrorPatternText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'match')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "match", validationErrorMatchText) }}
+      </span>
+      }
+    </div>
+    }
+
+    <!-- float -->
+    @if(item.visible && getFieldType(item) == 'float'){
+    <div [ngClass]="item.customClass" class="form-group">
+      <label class="form-label mb-0" for="{{ item.name }}">
+        <div class="field-label-container">
+          {{ item.title | NoxTextTruncater : maxLabelLength }}
+          @if(isFieldRequired(item)){
+          <span>*</span>
+          }
+          @if(getFieldInformationText(item)){
+          <fa-icon class="field-label-info-icon" [icon]="iconInformation"
+            ngbTooltip="{{ getFieldInformationText(item) }}" />
+          }
+        </div>
+      </label>
+      <input [formControlName]="item.name" [autofocus]="getFieldAutofocus(item)" [maxLength]="getFieldMaxLength(item)"
+        class="form-field form-control" type="number" name="{{item.name}}" />
+      @if(hasValidationError(item.name, 'required')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "required", validationErrorRequiredText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'minLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "minLength", validationErrorMinLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'maxLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "maxLength", validationErrorMaxLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'email')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "email", validationErrorEmailText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'pattern')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "pattern", validationErrorPatternText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'match')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "match", validationErrorMatchText) }}
+      </span>
+      }
+    </div>
+    }
+
+    <!-- checkBox -->
+    @if(item.visible && getFieldType(item) === 'checkBox'){
+    <div [ngClass]="item.customClass" class="form-check">
+      <input formControlName="{{item.name}}" class="form-field form-check-input me-2" type="checkbox"
+        name="{{ item.name }}" />
+      <label class="form-check-label mb-0" for="{{ item.name }}">
+        <div class="field-label-container">
+          {{ item.title | NoxTextTruncater : maxLabelLength }}
+          @if(isFieldRequired(item)){
+          <span>*</span>
+          }
+          @if(getFieldInformationText(item)){
+          <fa-icon class="field-label-info-icon" [icon]="iconInformation"
+            ngbTooltip="{{ getFieldInformationText(item) }}" />
+          }
+        </div>
+      </label>
+      @if(hasValidationError(item.name, 'required')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "required", validationErrorRequiredText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'minLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "minLength", validationErrorMinLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'maxLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "maxLength", validationErrorMaxLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'email')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "email", validationErrorEmailText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'pattern')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "pattern", validationErrorPatternText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'match')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "match", validationErrorMatchText) }}
+      </span>
+      }
+    </div>
+    }
+
+    <!-- password -->
+    @if(item.visible && getFieldType(item) == 'password'){
+    <div [ngClass]="item.customClass" class="form-group">
+      <label class="form-label mb-0" for="{{ item.name }}">
+        <div class="field-label-container">
+          {{ item.title | NoxTextTruncater : maxLabelLength }}
+          @if(isFieldRequired(item)){
+          <span>*</span>
+          }
+          @if(getFieldInformationText(item)){
+          <fa-icon class="field-label-info-icon" [icon]="iconInformation"
+            ngbTooltip="{{ getFieldInformationText(item) }}" />
+          }
+        </div>
+      </label>
+      <div class="password-container">
+        <input [formControlName]="item.name" [autofocus]="getFieldAutofocus(item)" [maxLength]="getFieldMaxLength(item)"
+          class="form-field form-control" type="password" name="{{item.name}}" />
+        @if(getFieldUserCanTogglePasswordVisibility(item)){
+        <button class="password-reveal-button" (mousedown)="onPasswordRevealButtonMouseDown($event, item)"
+          (mouseup)="onPasswordRevealButtonMouseUp($event, item)">
+          <span>
+            <fa-icon [icon]="passwordRevealIcon" />
+          </span>
+        </button>
+        }
+      </div>
+      @if(hasValidationError(item.name, 'required')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "required", validationErrorRequiredText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'minLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "minLength", validationErrorMinLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'maxLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "maxLength", validationErrorMaxLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'email')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "email", validationErrorEmailText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'pattern')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "pattern", validationErrorPatternText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'match')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "match", validationErrorMatchText) }}
+      </span>
+      }
+    </div>
+    }
+
+    <!-- date and time -->
+    @if(item.visible && (getFieldType(item) == 'date' || getFieldType(item) == 'time' || getFieldType(item) ==
+    'dateTime')){
+    <div [ngClass]="item.customClass" class="form-group">
+      <label class="form-label mb-0" for="{{ item.name }}">
+        <div class="field-label-container">
+          {{ item.title | NoxTextTruncater : maxLabelLength }}
+          @if(isFieldRequired(item)){
+          <span>*</span>}
+          @if(getFieldInformationText(item)){
+          <fa-icon class="field-label-info-icon" [icon]="iconInformation"
+            ngbTooltip="{{ getFieldInformationText(item) }}" />
+          }
+        </div>
+      </label>
+
+      <nox-date-time-picker [formControlName]="item.name" class="form-field"
+        [viewMode]="getFieldDateTimeViewMode(item)"></nox-date-time-picker>
+
+      @if(hasValidationError(item.name, 'required')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "required", validationErrorRequiredText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'minLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "minLength", validationErrorMinLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'maxLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "maxLength", validationErrorMaxLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'email')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "email", validationErrorEmailText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'pattern')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "pattern", validationErrorPatternText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'match')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "match", validationErrorMatchText) }}
+      </span>
+      }
+    </div>
+    }
+
+    <!-- dropDown -->
+    @if(item.visible && getFieldType(item) == 'dropDown'){
+    <div [ngClass]="item.customClass" class="form-group">
+      <label class="form-label mb-0" for="{{ item.name }}">
+        <div class="field-label-container">
+          {{ item.title | NoxTextTruncater : maxLabelLength }}
+          @if(isFieldRequired(item)){
+          <span>*</span>
+          }
+          @if(getFieldInformationText(item)){
+          <fa-icon class="field-label-info-icon" [icon]="iconInformation"
+            ngbTooltip="{{ getFieldInformationText(item) }}" />
+          }
+        </div>
+      </label>
+      <div class="field-input-container">
+        <select [formControlName]="item.name" class="form-field form-select" name="{{item.name}}">
+          @if(getFieldPlaceholder(item)){
+          <option [ngValue]="undefined" disabled>
+            {{ getFieldPlaceholder(item) }}
+          </option>
+          }
+
+          @for(dropDownItem of getFieldDropDownItems(item); track dropDownItem;){
+          <option [ngValue]="getDropDownItemValue(dropDownItem, item)">
+            {{ getFieldDropDownItemText(dropDownItem, item) }}
+          </option>
+          }
+        </select>
+        @if (hasFieldActions(item)) {
+        <div class="field-actions-container">
+          @for (fieldAction of getFieldActions(item); track fieldAction) {
+          <button class="field-action-button" (click)="onFieldActionButtonClicked($event, item, fieldAction)">
+            <img src="{{fieldAction.icon}}" />
+          </button>
+          }
+        </div>
+        }
+      </div>
+      @if(hasValidationError(item.name, 'required')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "required", validationErrorRequiredText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'minLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "minLength", validationErrorMinLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'maxLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "maxLength", validationErrorMaxLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'email')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "email", validationErrorEmailText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'pattern')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "pattern", validationErrorPatternText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'match')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "match", validationErrorMatchText) }}
+      </span>
+      }
+    </div>
+    }
+
+    <!-- textarea -->
+    @if(item.visible && getFieldType(item) === 'textarea'){
+    <div class="form-group">
+      <label class="form-label mb-0" for="{{ item.name }}">
+        <div class="field-label-container">
+          {{ item.title | NoxTextTruncater : maxLabelLength }}
+          @if(isFieldRequired(item)){
+          <span>*</span>
+          }
+          @if(getFieldInformationText(item)){
+          <fa-icon class="field-label-info-icon" [icon]="iconInformation"
+            ngbTooltip="{{ getFieldInformationText(item) }}" />
+          }
+        </div>
+      </label>
+      <textarea [placeholder]="getFieldPlaceholder(item)" [maxLength]="getFieldMaxLength(item)"
+        [formControlName]="item.name" class="form-field form-control" type="text"
+        autofocus="{{ getFieldAutofocus(item) }}" name="{{item.name}}"></textarea>
+      @if(hasValidationError(item.name, 'required')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "required", validationErrorRequiredText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'minLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "minLength", validationErrorMinLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'maxLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "maxLength", validationErrorMaxLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'email')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "email", validationErrorEmailText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'pattern')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "pattern", validationErrorPatternText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'match')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "match", validationErrorMatchText) }}
+      </span>
+      }
+    </div>
+    }
+
+    <!-- hidden -->
+    @if(getFieldType(item) === 'hidden'){
+    <input [formControlName]="item.name" type="hidden" name="{{item.name}}" />
+    }
+
+    <!-- file -->
+    @if(item.visible && getFieldType(item) === 'file'){
+    <div class="form-group">
+      <label class="form-label mb-0" for="{{ item.name }}">
+        <div class="field-label-container">
+          {{ item.title | NoxTextTruncater : maxLabelLength }}
+          @if(isFieldRequired(item)){
+          <span>*</span>
+          }
+          @if(getFieldInformationText(item)){
+          <fa-icon class="field-label-info-icon" [icon]="iconInformation"
+            ngbTooltip="{{ getFieldInformationText(item) }}" />
+          }
+        </div>
+      </label>
+      <!-- formControlName="{{getFieldFilePropertyName(item)}}" -->
+      @if (!isFieldFileDisabled(item)) {
+      <div class="field-input-container">
+        <input type="file" [placeholder]="getFieldPlaceholder(item)" class="form-field form-control"
+          autofocus="{{ getFieldAutofocus(item) }}" name="{{item.name}}" [value]="getFieldValue(item)"
+          accept="{{ getFieldAcceptedFileExtensions(item) }}" (input)="onInputFileInput($event, item)" />
+        @if (hasFieldActions(item)) {
+        <div class="field-actions-container">
+          @for (fieldAction of getFieldActions(item); track fieldAction) {
+          <button class="field-action-button" (click)="onFieldActionButtonClicked($event, item, fieldAction)">
+            <img src="{{fieldAction.icon}}" />
+          </button>
+          }
+        </div>
+        }
+      </div>
+      }
+      @if(mode != 'create'){
+      <div class="mt-2" [class.file-field-value]="mode != 'edit'">
+        <a target="_blank"
+          href="{{getFieldBaseUrl(item, baseUrl)}}/{{getFieldUrlPrefix(item)}}/{{getControlValue(item.name)}}">{{getControlValue(item.name)}}</a>
+      </div>
+      }
+      @if(hasValidationError(item.name, 'required')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "required", validationErrorRequiredText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'minLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "minLength", validationErrorMinLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'maxLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "maxLength", validationErrorMaxLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'email')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "email", validationErrorEmailText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'pattern')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "pattern", validationErrorPatternText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'match')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "match", validationErrorMatchText) }}
+      </span>
+      }
+    </div>
+    }
+
+    <!-- treeDropDown -->
+    @if(item.visible && getFieldType(item) == 'treeDropDown'){
+    <div [ngClass]="item.customClass" class="form-group">
+      <label class="form-label mb-0" for="{{ item.name }}">
+        <div class="field-label-container">
+          {{ item.title | NoxTextTruncater : maxLabelLength }}
+          @if(isFieldRequired(item)){
+          <span>*</span>
+          }
+          @if(getFieldInformationText(item)){
+          <fa-icon class="field-label-info-icon" [icon]="iconInformation"
+            ngbTooltip="{{ getFieldInformationText(item) }}" />
+          }
+        </div>
+      </label>
+      <nox-tree-drop-down [formControlName]="item.name" [textFieldName]="getFieldTextFieldName(item)!"
+        [valueFieldName]="getFieldValueFieldName(item)!" [childrenFieldName]="getFieldChildrenFieldName(item)!"
+        [dropDownWidth]="getFieldDropDownWidth(item)" [items]="getFieldTreeDropDownItems(item)"
+        [value]="getControlValue(item.name)" [emptySelectionText]="getFieldDropDownEmptySelectionText(item)" />
+      @if(hasValidationError(item.name, 'required')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "required", validationErrorRequiredText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'minLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "minLength", validationErrorMinLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'maxLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "maxLength", validationErrorMaxLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'email')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "email", validationErrorEmailText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'pattern')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "pattern", validationErrorPatternText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'match')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "match", validationErrorMatchText) }}
+      </span>
+      }
+    </div>
+    }
+
+    <!-- tags -->
+    @if(item.visible && getFieldType(item) == 'tags'){
+    <div [ngClass]="item.customClass" class="form-group">
+      <label class="form-label mb-0" for="{{ item.name }}">
+        <div class="field-label-container">
+          {{ item.title | NoxTextTruncater : maxLabelLength }}
+          @if(isFieldRequired(item)){
+          <span>*</span>
+          }
+          @if(getFieldInformationText(item)){
+          <fa-icon class="field-label-info-icon" [icon]="iconInformation"
+            ngbTooltip="{{ getFieldInformationText(item) }}" />
+          }
+        </div>
+      </label>
+      <nox-tags-input [formControlName]="item.name" class="form-field"></nox-tags-input>
+      @if(hasValidationError(item.name, 'required')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "required", validationErrorRequiredText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'minLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "minLength", validationErrorMinLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'maxLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "maxLength", validationErrorMaxLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'email')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "email", validationErrorEmailText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'pattern')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "pattern", validationErrorPatternText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'match')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "match", validationErrorMatchText) }}
+      </span>
+      }
+    </div>
+    }
+
+    <!-- editor -->
+    @if(item.visible && getFieldType(item) == 'editor'){
+    <div [ngClass]="item.customClass" class="form-group">
+      <label class="form-label mb-0" for="{{ item.name }}">
+        <div class="field-label-container">
+          {{ item.title | NoxTextTruncater : maxLabelLength }}
+          @if(isFieldRequired(item)){
+          <span>*</span>
+          }
+          @if(getFieldInformationText(item)){
+          <fa-icon class="field-label-info-icon" [icon]="iconInformation"
+            ngbTooltip="{{ getFieldInformationText(item) }}" />
+          }
+        </div>
+      </label>
+      <nox-editor [formControlName]="item.name" class="form-field"></nox-editor>
+      @if(hasValidationError(item.name, 'required')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "required", validationErrorRequiredText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'minLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "minLength", validationErrorMinLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'maxLength')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "maxLength", validationErrorMaxLengthText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'email')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "email", validationErrorEmailText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'pattern')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "pattern", validationErrorPatternText) }}
+      </span>
+      }
+      @if(hasValidationError(item.name, 'match')){
+      <span class="text-danger">
+        {{ getValidationErrorMessage(item, "match", validationErrorMatchText) }}
+      </span>
+      }
+    </div>
+    }
+  </div>
+  }
+</div>

@@ -1,0 +1,21 @@
+<div class="date-time-picker-container" [class.input-disabled]="disabled">
+  @if (viewMode == 'date' || viewMode == 'dateTime') {
+  <div class="date-time-picker-date-picker">
+    <input type="text" class="form-field form-control" [(ngModel)]="dateStruct" [disabled]="disabled"
+      (input)="onChange(value)" (blur)="onTouched()" ngbDatepicker #d="ngbDatepicker" [firstDayOfWeek]="firstDayOfWeek"
+      (dateSelect)="onDatePickerDateSelect($event)" />
+    @if(!disabled){
+    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
+    }
+  </div>
+  }
+  @if (viewMode == 'dateTime') {
+  <div class="ms-2"></div>
+  }
+  @if (viewMode == 'time' || viewMode == 'dateTime') {
+  <div class="date-time-picker-time-picker">
+    <ngb-timepicker [(ngModel)]="timeStruct" [meridian]="false" [spinners]="true" [disabled]="disabled"
+      (ngModelChange)="onTimePickerTimeSelect($event)" />
+  </div>
+  }
+</div>

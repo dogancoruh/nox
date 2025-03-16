@@ -1,0 +1,1 @@
+export declate type NoxSelectionAppearance = "row" | "compact";

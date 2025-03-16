@@ -1,0 +1,67 @@
+<div class="nox-tree">
+  @if(addRootNodeButtonVisible){
+  <button class="btn {{ getAddButtonClassNameForAppearance() }} mb-3" (click)="onAddRootNodeButtonClicked()">
+    @if(addRootNodeButtonIcon){
+    <fa-icon class="root-node-button-icon" [icon]="addRootNodeButtonIcon"></fa-icon>
+    }
+    {{ addRootNodeButtonText }}
+  </button>
+  }
+  @if(rootNodeTitle && data && data.length > 0){
+  <div class="root-node-row">
+    @if(selectionMode == 'multiple'){
+    <input type="checkbox" class="form-check-input me-2" [checked]="rootNodeSelected"
+      (input)="onInputCheckInput($event)" />
+    }
+    {{rootNodeTitle}}
+  </div>
+  }
+  @for(node of data; track node;){
+  <nox-tree-node #tree [isRootNode]="true" [readonly]="readonly" [tree]="this" [node]="node" [depth]="0"
+    [defaultNodeIcon]="defaultNodeIcon" [nodeIcons]="nodeIcons" [nodeActions]="nodeActions"
+    [nodeActionsAlign]="nodeActionsAlign" [textFieldName]="textFieldName" [valueFieldName]="valueFieldName"
+    [childrenFieldName]="childrenFieldName" [expandedFieldName]="expandedFieldName"
+    [disabledFieldName]="disabledFieldName" [iconTypeFieldName]="iconTypeFieldName"
+    [actionTypeFieldName]="actionTypeFieldName" [indexFieldName]="indexFieldName" [readonly]="readonly"
+    [selectable]="selectable" [selectionMode]="selectionMode" [iconAddNode]="iconAddNode" [iconEditNode]="iconEditNode"
+    [iconRemoveNode]="iconRemoveNode" [iconNodeCollapsed]="iconNodeCollapsed" [iconNodeExpanded]="iconNodeExpanded"
+    [canUserExpandCollapse]="canUserExpandCollapse" [autoCollapseOtherExpandedNodes]="autoCollapseOtherExpandedNodes"
+    [iconContextMenu]="iconNodeContextMenu" [ellipsisLength]="ellipsisLength" (onMoveDown)="onNodeMoveDownHandler($event)"
+    (onMoveUp)="onNodeMoveUpHandler($event)" (onSelectionChanged)="onNodeSelectionChanged($event)"
+    (onNodeExpanded)="onNodeExpandedHandler($event)" (onNodeCollapsed)="onNodeCollapsedHandler($event)"
+    (onAction)="onActionHandler($event)" />
+  }
+</div>
+
+<!-- initial empty data -->
+@if(dataRefreshReason == 'initial' && !loading && (!data || data.length == 0)){
+<div class="table empty-table">
+  <div class="p-2">{{ initialEmptyDataMessage }}</div>
+</div>
+}
+
+<!-- search empty data -->
+@if((dataRefreshReason == 'search' || dataRefreshReason == 'pager') && !loading && (!data || data.length == 0)){
+<div class="table empty-table">
+  <div class="p-2">{{ searchEmptyDataMessage }}</div>
+</div>
+}
+
+<!-- error data -->
+@if(!loading && errorMessage){
+<div class="table">
+  <div class="text-danger pb-2">{{ errorMessage }}</div>
+</div>
+}
+
+<!-- loading data -->
+@if(loading){
+<div class="p-2">
+  <div class="d-flex justify-content-center align-items-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">{{ loadingText }}</span>
+    </div>
+    <span class="ms-3">{{ loadingText }}</span>
+  </div>
+</div>
+}

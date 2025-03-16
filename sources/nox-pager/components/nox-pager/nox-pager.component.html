@@ -1,0 +1,57 @@
+@if(pageCount > 0){
+<div class="page-row d-flex flex-column flex-md-row align-items-center justify-content-between">
+  @if(totalRecordCountLocation == "left" && recordCount > 0){
+  <div class="text-center text-md-start d-none d-md-block">
+    <span class="pager-total-record-count-container">
+      {{getTotalRecordCountText()}}
+    </span>
+  </div>
+  }
+
+  <div class="d-flex align-items-center">
+    <div class="page-container">
+      <button class="page-button text-primary" (click)="onFirstPageClicked()">
+        <fa-icon [icon]="faStepBackward"></fa-icon>
+      </button>
+      <button class="page-button text-primary" (click)="onPreviousPageClicked()">
+        <fa-icon [icon]="faBackward"></fa-icon>
+      </button>
+      @for (pageItem of getPageItems(); track pageItem.index;) {
+      <button *ngIf="pageItem.index !== -1" class="page-button text-primary" (click)="onPageClicked(pageItem.index)">
+        @if (pageItem.index === pageIndex) {
+        <span class="fw-bold">{{ pageItem.index + 1 }}</span>
+        }
+        @if (pageItem.index !== pageIndex) {
+        <span>{{ pageItem.index + 1 }}</span>
+        }
+      </button>
+      <span *ngIf="pageItem.index === -1" class="page-ellipsis page-button text-primary">
+        <fa-icon [icon]="faEllipsis" />
+      </span>
+      }
+      <button class="page-button text-primary" (click)="onNextPageClicked()">
+        <fa-icon [icon]="faForward"></fa-icon>
+      </button>
+      <button class="page-button text-primary" (click)="onLastPageClicked()">
+        <fa-icon [icon]="faStepForward"></fa-icon>
+      </button>
+    </div>
+
+    @if(pageSizeVisible){
+    <select class="form-select page-selector ms-2" (input)="onPageSizeChanged($event)">
+      @for(ps of getPageSizes(); track ps;){
+      <option [value]="ps" [selected]="ps === pageSize">{{ps}}</option>
+      }
+    </select>
+    }
+  </div>
+
+  @if(totalRecordCountLocation == "right" && recordCount > 0){
+  <div class="text-center text-md-start d-none d-md-block">
+    <span class="pager-total-record-count-container">
+      {{getTotalRecordCountText()}}
+    </span>
+  </div>
+  }
+</div>
+}

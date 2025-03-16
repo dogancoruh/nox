@@ -1,0 +1,1 @@
+export declare type NoxTreeSelectionStyle = "fullRow" | "beginFromItemTitle" | "onlyItemTitle";
